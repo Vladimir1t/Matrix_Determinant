@@ -85,6 +85,11 @@ public:
             std::abort();
         return data_[num];
     } 
+    elem_t& operator[](size_t num) {
+        if (num >= size_)
+            std::abort();
+        return data_[num];
+    }
 
     void push_elem(elem_t new_elem) { //without realloc
         if (size_ == capacity_)
