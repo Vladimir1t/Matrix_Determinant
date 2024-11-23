@@ -36,13 +36,11 @@ private:
     
 public: 
     
-    buffer(size_t matrix_size) : matrix_size_(matrix_size) {
-        std::cout << "ctor. create buffer\n";
+    buffer(size_t matrix_size) {
         if (matrix_size <= 0) {
             std::abort(); 
         }
-        //matrix_size_ = matrix_size;
-        std::cout << "size matr = " << matrix_size_ << '\n';
+        matrix_size_ = matrix_size;
         capacity_ = matrix_size_ * matrix_size_; 
         data_ = new elem_t[capacity_]; 
     }
@@ -50,7 +48,7 @@ public:
     buffer() = default;
 
     buffer(const buffer& other) noexcept {  // copy ctor
-        std::cout << "copy ctor\n";
+        //std::cout << "copy ctor\n";
         capacity_ = other.capacity_;
         size_ = other.size_;
         matrix_size_ = other.matrix_size_;
@@ -61,13 +59,13 @@ public:
     }
 
     buffer(const buffer&& other) noexcept {  // move ctor
-        std::cout << "move ctor\n";
+        //std::cout << "move ctor\n";
         data_ = other.data_;
         other.data_ = nullptr;
     }
 
     buffer& operator=(const buffer& other) { 
-        std::cout << "copy assignment\n";
+        //std::cout << "copy assignment\n";
         if (&other == this) 
             return *this;
 
@@ -83,7 +81,7 @@ public:
     }
 
     buffer& operator=(const buffer&& other) noexcept {
-        std::cout << "move assignment\n";
+        //std::cout << "move assignment\n";
         if (&other == this) 
             return *this;
 
@@ -97,7 +95,7 @@ public:
     }
 
     ~buffer() noexcept {
-        std::cout << "dtor\n";
+        //std::cout << "dtor\n";
         delete[] data_;
     }
 
