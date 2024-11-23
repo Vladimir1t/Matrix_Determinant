@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstddef>
 
 #include "matrix.hpp"
 #include "buffer.hpp"
@@ -17,18 +18,20 @@ int main() {
     Matrix::matrix<double> mat_det(size);
     double new_elem;
     for (int i = 0; i != size * size; ++i) {
-        if (!(std::cin >> new_elem).good())
+        if (!(std::cin >> new_elem).good()) {
+            std::cout << "wrong elem value\n";
             return -1;
+        }
         mat_det.buffer.push_elem(new_elem);
     }
-   
-    std::cout << '\n';
-    for (int i = 0; i < size; ++i) {
-        for (int j = 0; j < size; ++j) {
-            std::cout << mat_det.buffer[i][j] << ' ';
+    #ifndef NDEBUG
+        for (int i = 0; i < size; ++i) {
+            for (int j = 0; j < size; ++j) {
+                std::cout << mat_det.buffer[i][j] << ' ';
+            }
+            std::cout << '\n';
         }
-        std::cout << '\n';
-    }
+    #endif
     std::cout << "det = " << mat_det.calculate_det() << '\n';
     
     return 0;

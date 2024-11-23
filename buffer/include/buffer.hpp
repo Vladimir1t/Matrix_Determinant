@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <stdexcept>
 
 namespace my {
 
@@ -37,6 +38,7 @@ private:
 public: 
     
     buffer(size_t matrix_size) {
+
         if (matrix_size <= 0) {
             std::abort(); 
         }
@@ -47,7 +49,7 @@ public:
 
     buffer() = default;
 
-    buffer(const buffer& other) noexcept {  // copy ctor
+    buffer(const buffer& other) noexcept { 
         //std::cout << "copy ctor\n";
         capacity_ = other.capacity_;
         size_ = other.size_;
@@ -58,7 +60,7 @@ public:
         }
     }
 
-    buffer(const buffer&& other) noexcept {  // move ctor
+    buffer(const buffer&& other) noexcept {  
         //std::cout << "move ctor\n";
         data_ = other.data_;
         other.data_ = nullptr;
@@ -103,30 +105,35 @@ public:
 
     elem_t& at(size_t index) const {
         if (index >= size_)
-            std::abort();
+            std::range_error("index out of range");
         return data_[index];
     } 
 
     proxy_buffer<elem_t> operator[](size_t index) {
         if (index >= size_)
-            std::abort();
+            throw std::range_error("index out of range");
         return proxy_buffer<elem_t>(data_ + index * matrix_size_);
     }
 
     const proxy_buffer<elem_t> operator[](size_t index) const {
         if (index >= size_)
-            std::abort();
+            throw std::range_error("index out of range");
         return proxy_buffer<elem_t>(data_ + index * matrix_size_);
     }
 
-    void push_elem(elem_t new_elem) { //without realloc
-        if (size_ == capacity_)
-            return;
+    void push_elem(elem_t new_elem) { 
+        if (size_ == capacity_) {
+            void* mem = std::realloc(data_, capacity_ * 2);
+            data_ = static_cast<elem_t*>(mem);
+            if (!data_)
+                throw std::bad_alloc();
+            capacity_ *= 2;
+        }
         data_[size_++] = new_elem;
     }
     void pop_elem() {
         if (size_ == 0)
-            return;
+            throw std::range_error("buffer is empty");
         size_--;
     }
 };

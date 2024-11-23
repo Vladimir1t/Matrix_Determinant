@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <cstddef>
 
 #include "matrix.hpp"
 #include "buffer.hpp"
@@ -29,7 +30,6 @@ int run_tests() {
     while (!test_file.eof()) {
 
         if (!(test_file >> size).good()) {
-            std::cout << "wrong size value\n";
             return -1;
         }
         Matrix::matrix<double> mat_det(size);
