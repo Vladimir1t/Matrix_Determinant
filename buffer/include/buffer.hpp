@@ -6,22 +6,44 @@
 
 namespace my {
 
+template<class elem_t> 
+class proxy_buffer {
+
+private:
+
+    elem_t* row_ = nullptr;
+
+public:
+
+    proxy_buffer(elem_t* row) : row_(row) {}
+
+    elem_t& operator[](size_t index) {
+        return row_[index];
+    }
+    const elem_t& operator[](size_t index) const {
+        return row_[index];
+    }
+}; 
+
 template<class elem_t>
 class buffer {
 
 private:
-    size_t size_     = 0;
-    size_t capacity_ = 0;
-    elem_t* data_  = nullptr;
-
+    size_t size_        = 0;
+    size_t matrix_size_ = 0;
+    size_t capacity_    = 0;
+    elem_t* data_       = nullptr;
+    
 public: 
     
-    buffer(size_t capacity) noexcept {
+    buffer(size_t matrix_size) : matrix_size_(matrix_size) {
         std::cout << "ctor. create buffer\n";
-        if (capacity <= 0) {
+        if (matrix_size <= 0) {
             std::abort(); 
         }
-        capacity_ = capacity; 
+        //matrix_size_ = matrix_size;
+        std::cout << "size matr = " << matrix_size_ << '\n';
+        capacity_ = matrix_size_ * matrix_size_; 
         data_ = new elem_t[capacity_]; 
     }
 
@@ -31,11 +53,11 @@ public:
         std::cout << "copy ctor\n";
         capacity_ = other.capacity_;
         size_ = other.size_;
+        matrix_size_ = other.matrix_size_;
         data_ = new elem_t[capacity_];
         for (int i = 0; i != size_; ++i) {
             data_[i] = other.data_[i];
         }
-        // std::strcpy(data_, other.data_);
     }
 
     buffer(const buffer&& other) noexcept {  // move ctor
@@ -44,7 +66,7 @@ public:
         other.data_ = nullptr;
     }
 
-    buffer& operator=(const buffer& other) { // if already exist 
+    buffer& operator=(const buffer& other) { 
         std::cout << "copy assignment\n";
         if (&other == this) 
             return *this;
@@ -52,8 +74,8 @@ public:
         delete[] data_;
         size_ = other.size_;
         capacity_ = other.capacity_;
+        matrix_size_ = other.matrix_size_;
         data_ = new elem_t[capacity_];
-        // std::strcpy(data_, other.data_);
         for (int i = 0; i != size_; ++i) {
             data_[i] = other.data_[i];
         }
@@ -67,6 +89,7 @@ public:
 
         delete[] data_;
         size_ = other.size_;
+        matrix_size_ = other.matrix_size_;
         capacity_ = other.capacity_;
         data_ = other.data_;
 
@@ -80,15 +103,22 @@ public:
 
 public:
 
-    elem_t& at(size_t num) const {
-        if (num >= size_)
+    elem_t& at(size_t index) const {
+        if (index >= size_)
             std::abort();
-        return data_[num];
+        return data_[index];
     } 
-    elem_t& operator[](size_t num) {
-        if (num >= size_)
+
+    proxy_buffer<elem_t> operator[](size_t index) {
+        if (index >= size_)
             std::abort();
-        return data_[num];
+        return proxy_buffer<elem_t>(data_ + index * matrix_size_);
+    }
+
+    const proxy_buffer<elem_t> operator[](size_t index) const {
+        if (index >= size_)
+            std::abort();
+        return proxy_buffer<elem_t>(data_ + index * matrix_size_);
     }
 
     void push_elem(elem_t new_elem) { //without realloc

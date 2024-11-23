@@ -14,12 +14,22 @@ int main() {
         std::cout << "wrong size value\n";
         return -1;
     }
-    matrix::determinant<double> mat_det(size);
+    Matrix::matrix<double> mat_det(size);
     double new_elem;
     for (int i = 0; i != size * size; ++i) {
-        std::cin >> new_elem;
+        if (!(std::cin >> new_elem).good())
+            return -1;
         mat_det.buffer.push_elem(new_elem);
     }
+   
+    std::cout << '\n';
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            std::cout << mat_det.buffer[i][j] << ' ';
+        }
+        std::cout << '\n';
+    }
+    std::cout << "det = " << mat_det.calculate_det() << '\n';
     
     return 0;
 }
