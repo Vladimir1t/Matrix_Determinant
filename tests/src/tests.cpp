@@ -23,15 +23,12 @@ int run_tests() {
     size_t size;
     double elem;
     double det_ref;
-    bool all_tests_right = true;
+    bool   all_tests_right = true;
     size_t test_counter = 0;
-    double epsilon = 0.000001;
+    const double epsilon = 0.000001;
 
-    while (!test_file.eof()) {
+    while (!test_file.eof() && (test_file >> size).good()) {
 
-        if (!(test_file >> size).good()) {
-            return -1;
-        }
         Matrix::matrix<double> mat_det(size);
 
         for (int i = 0; i != size * size; ++i) {
