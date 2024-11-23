@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <cmath>
 
 #include "buffer.hpp" 
 
