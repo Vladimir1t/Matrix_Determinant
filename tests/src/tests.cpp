@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <cmath>
 
 #include "matrix.hpp"
 #include "buffer.hpp"
