@@ -32,7 +32,7 @@ int main() {
             std::cout << '\n';
         }
     #endif
-    std::cout << "det = " << mat_det.calculate_det() << '\n';
+    std::cout << mat_det.calculate_det() << '\n';
     
     return 0;
 }
