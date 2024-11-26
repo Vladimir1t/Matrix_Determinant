@@ -42,7 +42,7 @@ public:
                 for (int j = i + 1; j < size_; ++j) {
                     if (std::fabs(buffer[i][j]) > epsilon_) {
                         for (int k = 0; k < size_; ++k) {
-                            std::swap(buffer[i][k], buffer[j][k]); 
+                            std::swap(buffer[k][i], buffer[k][j]); 
                         }
                         det *= -1;
                         swapped = true;
@@ -51,6 +51,16 @@ public:
                 if (!swapped)
                     return 0;
             }
+            #ifndef NDEBUG
+                std::cout << "swapped collums\n";
+                for (int i = 0; i < size_; ++i) {
+                    for (int j = 0; j < size_; ++j) {
+                        std::cout << buffer[i][j] << ' ';
+                    }
+                    std::cout << '\n';
+                }
+            #endif 
+
             for (int k = i + 1; k < size_; ++k) {
                 elem_t factor = buffer[k][i] / buffer[i][i]; 
                 for (int j = i; j < size_; ++j) {
