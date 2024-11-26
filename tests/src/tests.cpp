@@ -29,15 +29,15 @@ int run_tests() {
 
     while (!test_file.eof() && (test_file >> size).good()) {
 
-        Matrix::matrix<double> mat_det(size);
+        Matrix::matrix<double> matrx(size);
 
         for (int i = 0; i != size * size; ++i) {
             if (!(test_file >> elem).good())
                 return -1;
-            mat_det.buffer.push_elem(elem);
+            matrx.push_elem(elem);
         }
         test_file >> det_ref;
-        if (!(std::fabs(det_ref - mat_det.calculate_det()) < epsilon)) {
+        if (!(std::fabs(det_ref - matrx.calculate_det()) < epsilon)) {
             std::cout << "test [" << test_counter << "] is incorrect\n";
             all_tests_right = false;
         }

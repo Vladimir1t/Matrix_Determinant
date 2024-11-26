@@ -9,6 +9,17 @@
 
 namespace Matrix {
 
+// template<class elem_t>
+// class matrix {
+
+// private:
+
+//     size_t rows_ = 0;
+//     size_t col_  = 0;
+
+
+// };
+
 template<class elem_t>
 class matrix {
 
@@ -16,17 +27,29 @@ private:
 
     size_t size_ = 0;
     elem_t det_  = 0;
+    my::buffer<elem_t> buffer_;
 
 public:
     
-    my::buffer<elem_t> buffer;
-
     matrix(size_t size) {
         if (size <= 0)
             throw std::invalid_argument("size <= 0");
         size_ = size;
         my::buffer<elem_t> new_buffer(size_);
-        buffer = new_buffer;
+        buffer_ = new_buffer;
+    }
+
+    void push_elem(elem_t new_elem) {
+        buffer_.push_elem(new_elem);
+    }
+
+    void print() {
+        for (int i = 0; i < size_; ++i) {
+            for (int j = 0; j < size_; ++j) {
+                std::cout << buffer_[i][j] << ' ';
+            }
+            std::cout << '\n';
+        }
     }
 
     /** @brief Gauss method of calculating determinant
@@ -37,12 +60,12 @@ public:
 
         for (int i = 0; i != size_; ++i) {
 
-            if (std::fabs(buffer[i][i]) < epsilon_) {
+            if (std::fabs(buffer_[i][i]) < epsilon_) {
                 bool swapped = false;
                 for (int j = i + 1; j < size_; ++j) {
-                    if (std::fabs(buffer[i][j]) > epsilon_) {
+                    if (std::fabs(buffer_[i][j]) > epsilon_) {
                         for (int k = 0; k < size_; ++k) {
-                            std::swap(buffer[k][i], buffer[k][j]); 
+                            std::swap(buffer_[k][i], buffer_[k][j]); 
                         }
                         det *= -1;
                         swapped = true;
@@ -53,21 +76,16 @@ public:
             }
             #ifndef NDEBUG
                 std::cout << "swapped collums\n";
-                for (int i = 0; i < size_; ++i) {
-                    for (int j = 0; j < size_; ++j) {
-                        std::cout << buffer[i][j] << ' ';
-                    }
-                    std::cout << '\n';
-                }
+                print();
             #endif 
 
             for (int k = i + 1; k < size_; ++k) {
-                elem_t factor = buffer[k][i] / buffer[i][i]; 
+                elem_t factor = buffer_[k][i] / buffer_[i][i]; 
                 for (int j = i; j < size_; ++j) {
-                    buffer[k][j] -= factor * buffer[i][j];
+                    buffer_[k][j] -= factor * buffer_[i][j];
                 }
             }
-            det *= buffer[i][i];
+            det *= buffer_[i][i];
         }
         det_ = det;
 
