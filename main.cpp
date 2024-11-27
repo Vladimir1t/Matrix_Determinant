@@ -15,7 +15,7 @@ int main() {
             std::cout << "wrong size value\n";
             return -1;
         }
-        Matrix::matrix<double> matrx(size);
+        Matrix::matrix_sq<double> matrx(size);
         double new_elem;
         for (int i = 0; i != size * size; ++i) {
             if (!(std::cin >> new_elem).good()) {

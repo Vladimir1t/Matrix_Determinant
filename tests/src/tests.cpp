@@ -29,7 +29,7 @@ int run_tests() {
 
     while (!test_file.eof() && (test_file >> size).good()) {
 
-        Matrix::matrix<double> matrx(size);
+        Matrix::matrix_sq<double> matrx(size);
 
         for (int i = 0; i != size * size; ++i) {
             if (!(test_file >> elem).good())
