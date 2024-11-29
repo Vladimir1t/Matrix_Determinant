@@ -40,3 +40,4 @@ target_compile_options(test.x   PRIVATE "$<$<CONFIG:RELEASE>:${CMAKE_CXX_FLAGS_R
 #
 # cmake .. -DCMAKE_CXX_INCLUDE_WHAT_YOU_USE=./../../../../include-what-you-use/build/bin/include-what-you-use
 # make
+

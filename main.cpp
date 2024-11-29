@@ -27,12 +27,13 @@ int main() {
         #ifndef NDEBUG
             matrx.print();
         #endif
+        matrx.print();
         std::cout << matrx.calculate_det() << '\n';
     }
     catch (const std::exception&) {
         std::cout << "Error\n";
         return -1;
     }
-    
+        
     return 0;
 }
