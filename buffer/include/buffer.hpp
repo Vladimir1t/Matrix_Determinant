@@ -77,9 +77,9 @@ public:
             return *this;
 
         delete[] data_;
-        size_ = other.size_;
-        capacity_ = other.capacity_;
-        matrix_col_ = other.matrix_col_;
+        size_        = other.size_;
+        capacity_    = other.capacity_;
+        matrix_col_  = other.matrix_col_;
         matrix_rows_ = other.matrix_rows_;
         data_ = new elem_t[capacity_];
 
@@ -95,11 +95,11 @@ public:
             return *this;
 
         delete[] data_;
-        size_ = other.size_;
+        size_        = other.size_;
         matrix_rows_ = other.matrix_rows_;
-        matrix_col_ = other.matrix_col_;
-        capacity_ = other.capacity_;
-        data_ = other.data_;
+        matrix_col_  = other.matrix_col_;
+        capacity_    = other.capacity_;
+        data_        = other.data_;
 
         return *this;
     }
@@ -120,13 +120,13 @@ public:
     proxy_buffer<elem_t> operator[](size_t index) {
         if (index >= matrix_rows_)
             throw std::range_error("index out of range");
-        return proxy_buffer<elem_t>(data_ + index * matrix_rows_);
+        return proxy_buffer<elem_t>(data_ + index * matrix_col_);
     }
 
     const proxy_buffer<elem_t> operator[](size_t index) const {
         if (index >= matrix_rows_)
             throw std::range_error("index out of range");
-        return proxy_buffer<elem_t>(data_ + index * matrix_rows_);
+        return proxy_buffer<elem_t>(data_ + index * matrix_col_);
     }
 
     void push_elem(elem_t new_elem) { 

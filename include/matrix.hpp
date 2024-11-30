@@ -50,6 +50,18 @@ public:
             std::cout << '\n';
         }
     }
+    void push_elem(elem_t new_elem) {
+        buffer_.push_elem(new_elem);
+    }
+
+    std::vector<double> get_elements() {
+        std::vector<elem_t> elements(rows_ * col_, 1);
+        int indx = 0;
+        for (elem_t& elem: elements) 
+            elem = buffer_.at(indx++);
+        
+        return elements;
+    }
 };
 
 template<class elem_t>
@@ -73,9 +85,9 @@ public:
         buffer_ = new_buffer;
     }
 
-    void push_elem(elem_t new_elem) {
-        buffer_.push_elem(new_elem);
-    }
+    // void push_elem(elem_t new_elem) {
+    //     buffer_.push_elem(new_elem);
+    // }
 
     void print() override {
         for (int i = 0; i < rows_; ++i) {
