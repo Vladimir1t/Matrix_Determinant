@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <cmath>
+#include <vector>
 
 #include "buffer.hpp" 
 
@@ -12,7 +13,7 @@ namespace Matrix {
 template<class elem_t>
 class matrix {
 
-protected:
+//protected:
 
     size_t rows_ = 0;
     size_t col_  = 0;
