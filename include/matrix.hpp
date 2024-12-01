@@ -86,10 +86,6 @@ public:
         buffer_ = new_buffer;
     }
 
-    // void push_elem(elem_t new_elem) {
-    //     buffer_.push_elem(new_elem);
-    // }
-
     void print() override {
         for (int i = 0; i < rows_; ++i) {
             for (int j = 0; j < col_; ++j) {

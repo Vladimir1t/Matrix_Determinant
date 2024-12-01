@@ -89,7 +89,7 @@ public:
         return *this;
     }
 
-    buffer& operator=(const buffer&& other) noexcept {
+    buffer& operator=(buffer&& other) noexcept {
         //std::cout << "move assignment\n";
         if (&other == this) 
             return *this;
@@ -100,6 +100,7 @@ public:
         matrix_col_  = other.matrix_col_;
         capacity_    = other.capacity_;
         data_        = other.data_;
+        other.data_  = nullptr;
 
         return *this;
     }
@@ -133,8 +134,6 @@ public:
         if (size_ == capacity_) {
             void* mem = std::realloc(data_, capacity_ * 2);
             data_ = static_cast<elem_t*>(mem);
-            if (!data_)
-                throw std::bad_alloc();
             capacity_ *= 2;
         }
         data_[size_++] = new_elem;
