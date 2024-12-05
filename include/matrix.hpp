@@ -36,7 +36,9 @@ public:
     
         for (int i = 0; i != rows_; ++i) {
             for (int j = 0; j != col_; ++j) {
-                matrix_sum.buffer_[i][j] = buffer_[i][j] + other.buffer_[i][j];  
+               // matrix_sum.buffer_[i][j] = buffer_[i][j] + other.buffer_[i][j];  
+               //std::cout << "+\n";
+                matrix_sum.buffer_.push_elem(buffer_[i][j] + other.buffer_[i][j]);
             }
         }
         return matrix_sum;
@@ -56,7 +58,7 @@ public:
     }
 
     std::vector<double> get_elements() {
-        std::vector<elem_t> elements(rows_ * col_, 1);
+        std::vector<elem_t> elements(rows_ * col_);
         int indx = 0;
         for (elem_t& elem: elements) 
             elem = buffer_.at(indx++);

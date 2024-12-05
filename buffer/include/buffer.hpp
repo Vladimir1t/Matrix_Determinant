@@ -53,7 +53,7 @@ public:
     buffer() = default;
 
     buffer(const buffer& other) noexcept { 
-        //std::cout << "copy ctor\n";
+        // std::cout << "copy ctor\n";
         capacity_ = other.capacity_;
         size_ = other.size_;
         matrix_rows_ = other.matrix_rows_;
@@ -66,9 +66,13 @@ public:
     }
 
     buffer(buffer&& other) noexcept {  
-        //std::cout << "move ctor\n";
+        // std::cout << "move ctor\n";
         data_ = other.data_;
         other.data_ = nullptr;
+        capacity_ = other.capacity_;
+        size_ = other.size_;
+        matrix_rows_ = other.matrix_rows_;
+        matrix_col_ = other.matrix_col_;
     }
 
     buffer& operator=(const buffer& other) { 
@@ -90,7 +94,7 @@ public:
     }
 
     buffer& operator=(buffer&& other) noexcept {
-        //std::cout << "move assignment\n";
+        // std::cout << "move assignment\n";
         if (&other == this) 
             return *this;
 
@@ -106,15 +110,16 @@ public:
     }
 
     ~buffer() noexcept {
-        //std::cout << "dtor\n";
+        // std::cout << "dtor\n";
         delete[] data_;
     }
 
 public:
 
     elem_t& at(size_t index) const {
-        if (index >= size_)
-            std::range_error("index out of range");
+        if (index >= size_) 
+            throw std::range_error("index out of range");
+    
         return data_[index];
     } 
 

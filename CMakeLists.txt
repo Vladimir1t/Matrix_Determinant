@@ -11,6 +11,9 @@ set(test_srcs
     tests/src/tests.cpp
 )
 
+enable_testing()
+find_package(GTest REQUIRED)
+
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -30,6 +33,7 @@ target_include_directories(test.x PRIVATE
             ${CMAKE_SOURCE_DIR}/buffer/include     
 )
 
+target_link_libraries(test.x GTest::GTest GTest::Main)
 target_compile_options(matrix.x PRIVATE "$<$<CONFIG:RELEASE>:${CMAKE_CXX_FLAGS_RELEASE}>" ${FLAGS})
 target_compile_options(test.x   PRIVATE "$<$<CONFIG:RELEASE>:${CMAKE_CXX_FLAGS_RELEASE}>" ${FLAGS})
 
