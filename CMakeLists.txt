@@ -40,7 +40,7 @@ target_compile_options(test.x   PRIVATE "$<$<CONFIG:RELEASE>:${CMAKE_CXX_FLAGS_R
 # cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
 # cmake --build build
 # cmake -DCMAKE_BUILD_TYPE=Release
-# ./build/matrix.x
+# MALLOC_STACK_LOGGING=1 leaks -atExit -- build/matrix.x    --- санитайзер 
 #
 # cmake .. -DCMAKE_CXX_INCLUDE_WHAT_YOU_USE=./../../../../include-what-you-use/build/bin/include-what-you-use
 # make

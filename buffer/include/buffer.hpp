@@ -52,7 +52,7 @@ public:
 
     buffer() = default;
 
-    buffer(const buffer& other) noexcept { 
+    buffer(const buffer& other) { 
         // std::cout << "copy ctor\n";
         capacity_ = other.capacity_;
         size_ = other.size_;
@@ -60,8 +60,14 @@ public:
         matrix_col_ = other.matrix_col_;
         data_ = new elem_t[capacity_];
         
-        for (int i = 0; i != size_; ++i) {
-            data_[i] = other.data_[i];
+        try {
+            for (int i = 0; i != size_; ++i) {
+                data_[i] = other.data_[i];
+            }
+        }
+        catch (...) {
+            delete[] data_;
+            throw;
         }
     }
 
@@ -87,8 +93,14 @@ public:
         matrix_rows_ = other.matrix_rows_;
         data_ = new elem_t[capacity_];
 
-        for (int i = 0; i != size_; ++i) {
-            data_[i] = other.data_[i];
+        try {
+            for (int i = 0; i != size_; ++i) {
+                data_[i] = other.data_[i];
+            }
+        }
+        catch(...) {
+            delete[] data_;
+            throw;
         }
         return *this;
     }

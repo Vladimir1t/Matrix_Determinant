@@ -36,8 +36,6 @@ public:
     
         for (int i = 0; i != rows_; ++i) {
             for (int j = 0; j != col_; ++j) {
-               // matrix_sum.buffer_[i][j] = buffer_[i][j] + other.buffer_[i][j];  
-               //std::cout << "+\n";
                 matrix_sum.buffer_.push_elem(buffer_[i][j] + other.buffer_[i][j]);
             }
         }
