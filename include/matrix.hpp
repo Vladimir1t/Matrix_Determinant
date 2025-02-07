@@ -63,6 +63,8 @@ public:
         
         return elements;
     }
+
+    virtual ~matrix() {}
 };
 
 template<class elem_t>

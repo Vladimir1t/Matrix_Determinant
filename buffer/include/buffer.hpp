@@ -8,7 +8,7 @@
 namespace my {
 
 template<class elem_t> 
-class proxy_buffer {
+class proxy_buffer final {
 
 private:
 
@@ -27,7 +27,7 @@ public:
 }; 
 
 template<class elem_t>
-class buffer {
+class buffer final {
 
 private:
     size_t  size_        = 0;
@@ -38,6 +38,8 @@ private:
     
 public: 
     
+    buffer() = default;
+
     buffer(size_t matrix_rows, size_t matrix_col) {
 
         if (matrix_rows <= 0 || matrix_col <= 0) 
@@ -50,58 +52,54 @@ public:
         data_ = new elem_t[capacity_]; 
     }
 
-    buffer() = default;
+    buffer(buffer&& other) noexcept {  
+        // std::cout << "move ctor\n";
+        data_        = other.data_;
+        other.data_  = nullptr;
+        capacity_    = other.capacity_;
+        size_        = other.size_;
+        matrix_rows_ = other.matrix_rows_;
+        matrix_col_  = other.matrix_col_;
+    }
+
+    template <typename T>
+    T *safe_copy(const T* src, size_t src_size) {
+        // std::cout << "safe_copy\n";
+        T *dest = new T[src_size];
+        try {
+            for (size_t idx = 0; idx != src_size; ++idx)
+                dest[idx] = src[idx];
+        }
+        catch (...) {
+            delete[] dest;
+            throw;
+        }
+        return dest;
+    }
 
     buffer(const buffer& other) { 
         // std::cout << "copy ctor\n";
-        capacity_ = other.capacity_;
-        size_ = other.size_;
+        data_ = safe_copy(other.data_, other.capacity_);
+        capacity_    = other.capacity_;
+        size_        = other.size_;
         matrix_rows_ = other.matrix_rows_;
-        matrix_col_ = other.matrix_col_;
-        data_ = new elem_t[capacity_];
-        
-        try {
-            for (int i = 0; i != size_; ++i) {
-                data_[i] = other.data_[i];
-            }
-        }
-        catch (...) {
-            delete[] data_;
-            throw;
-        }
-    }
-
-    buffer(buffer&& other) noexcept {  
-        // std::cout << "move ctor\n";
-        data_ = other.data_;
-        other.data_ = nullptr;
-        capacity_ = other.capacity_;
-        size_ = other.size_;
-        matrix_rows_ = other.matrix_rows_;
-        matrix_col_ = other.matrix_col_;
+        matrix_col_  = other.matrix_col_;
     }
 
     buffer& operator=(const buffer& other) { 
-        //std::cout << "copy assignment\n";
+        // std::cout << "copy assignment\n";
         if (&other == this) 
             return *this;
-
+        
+        elem_t* tmp_data = safe_copy(other.data_, other.capacity_);
         delete[] data_;
+       
+        data_        = tmp_data;
         size_        = other.size_;
         capacity_    = other.capacity_;
         matrix_col_  = other.matrix_col_;
         matrix_rows_ = other.matrix_rows_;
-        data_ = new elem_t[capacity_];
 
-        try {
-            for (int i = 0; i != size_; ++i) {
-                data_[i] = other.data_[i];
-            }
-        }
-        catch(...) {
-            delete[] data_;
-            throw;
-        }
         return *this;
     }
 
@@ -111,12 +109,12 @@ public:
             return *this;
 
         delete[] data_;
+        data_        = other.data_;
+        other.data_  = nullptr;
         size_        = other.size_;
         matrix_rows_ = other.matrix_rows_;
         matrix_col_  = other.matrix_col_;
         capacity_    = other.capacity_;
-        data_        = other.data_;
-        other.data_  = nullptr;
 
         return *this;
     }
@@ -131,7 +129,6 @@ public:
     elem_t& at(size_t index) const {
         if (index >= size_) 
             throw std::range_error("index out of range");
-    
         return data_[index];
     } 
 
